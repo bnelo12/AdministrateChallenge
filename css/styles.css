@@ -63,3 +63,8 @@
 #organization-list-spinner {
     text-align: center;
 }
+
+#edit-org-button {
+    float: right;
+    top: 20px;
+}
