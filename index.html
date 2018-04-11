@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Address Book</title>
+        <link rel="icon" href="favicon.ico"> 
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.green-indigo.min.css" />
+        <link rel="stylesheet" href="css/styles.css">
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.2/velocity.min.js"></script>
+    </head>
+    <body>
+        <!-- Header Bar -->
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row" style="height: 100px">
+                    <span class="mdl-layout-title">
+                        <image src="img/logo.png" width="80px"/>
+                    </span>
+                </div>
+            </header>
+        </div>
+        <!-- Add Organization View -->
+        <div class="add-organization-view  mdl-shadow--4dp">
+            <div class="organization-view-header">
+                <h2 class="mdl-card__title-text">Add Organization</h2>
+                <hr/>
+            </div>
+            <div class="add-org-form">
+                <form action="#" id="add-org-form">
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" name="name">
+                        <label class="mdl-textfield__label" for="name">Name...</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" name="phone">
+                        <label class="mdl-textfield__label" for="phone">Phone Number...</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" name="email">
+                        <label class="mdl-textfield__label" for="email">Email...</label>
+                    </div>
+                </form>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="submit-add-org-button">
+                        Submit
+                </button>
+                <div class="mdl-spinner mdl-js-spinner" id="add-org-spinner"></div>      
+            </div>
+        </div>
+        <!-- Organization Detail -->
+        <div class="organization-detail  mdl-shadow--4dp">
+            <div class="organization-view-header">
+                <h2 class="mdl-card__title-text" id="organization-name">Organization</h2>
+                <hr/>
+            </div>
+        </div>
+        <!-- Organization List View -->
+        <div class="organization-view  mdl-shadow--4dp">
+            <div class="organization-view-header">
+                <h2 class="mdl-card__title-text">Organizations</h2>
+                <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored" id="add-org-button">
+                    <i class="material-icons" id="add-org-button-icon">add</i>
+                </button>
+                <hr/>
+            </div>
+            <ul class="demo-list-control mdl-list" id="organization-list">
+                <!--div class="mdl-spinner mdl-js-spinner is-active" id="organization-list-spinner"></div-->
+                <template id="organization-list-item">
+                    <li class="mdl-list__item mdl-list__item--two-line organozation-list-item">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-icon" style="font-size: 30px">folder_shared</i>
+                            <span id="organization-name">Appointed</span>
+                            <span class="mdl-list__item-sub-title" id="organization-email">appointed@gmail.com</span>
+                        </span>
+                        <span class="mdl-list__item-secondary-action">
+                            <i class="material-icons mdl-list__item-icon" style="font-size: 30px">chevron_right</i>
+                        </span>
+                    </li>
+                    <hr class="organization-list-line-break"/>
+                </template>
+            </ul>
+        </div>
+    </body>
+    <script src="js/app.js"></script>
+</html>

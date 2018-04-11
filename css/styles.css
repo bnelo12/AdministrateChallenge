@@ -1,0 +1,65 @@
+.organization-view {
+    position: absolute;
+    width: 25vw;
+    margin: 0px;
+    height: calc(100vh - 100px);
+    top: 100px;
+    background-color: #FAFAFA;
+}
+
+.add-organization-view {
+    position: absolute;
+    width: 25vw;
+    margin: 0px;
+    height: calc(100vh - 100px);
+    top: 100px;
+    left: 0;
+    background-color: #FAFAFA;
+}
+
+.organization-detail {
+    position: absolute;
+    width: 25vw;
+    margin: 0px;
+    height: calc(100vh - 100px);
+    top: 100px;
+    left: 0;
+    background-color: #FAFAFA;
+}
+
+
+.add-org-form {
+    text-align: center;
+}
+
+.organization-view-header {
+    margin: 22px;
+}
+
+#organization-list {
+    overflow-y: auto;
+    height: 100%;
+}
+
+.organozation-list-item:hover{
+    cursor: pointer;
+    background-color: rgb(83,109,254);
+}
+
+.organozation-list-item:hover *{
+    color: white !important;
+}
+
+.organization-list-line-break {
+    margin: 0;
+}
+
+#add-org-button {
+    position: absolute;
+    top: 13px;
+    right: -20px;
+}
+
+#organization-list-spinner {
+    text-align: center;
+}
