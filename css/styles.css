@@ -17,6 +17,20 @@
     background-color: #FAFAFA;
 }
 
+.add-contact-view {
+    position: absolute;
+    width: 25vw;
+    margin: 0px;
+    height: calc(100vh - 100px);
+    top: 100px;
+    left: 0;
+    background-color: #FAFAFA;
+}
+
+.contact-list-item {
+    height: 110px;
+}
+
 .organization-detail {
     position: absolute;
     width: 25vw;
@@ -29,6 +43,10 @@
 
 
 .add-org-form {
+    text-align: center;
+}
+
+.add-contact-form {
     text-align: center;
 }
 
