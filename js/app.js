@@ -50,7 +50,6 @@ var clearCreateOrgMenu = function() {
 }
 
 var submitCreateOrgMenu = function() {
-    // closeCreateOrgMenu();
     $("#submit-add-org-button").hide();
     $("#add-org-spinner").addClass('is-active');
     let orgJSON = createOrgJSON();
@@ -73,12 +72,12 @@ var closeCreateOrgMenu = function() {
     $('.add-organization-view').velocity({
         left: "0"
     }, {
-        easing: "swing",
+        duration: 0
     });
     $('#add-org-button').velocity({
         left: $('.add-organization-view').width() - 20
     }, {
-        easing: "swing",
+        duration: 0
     });
     app.create_org_menu_open = false;
 }
@@ -122,7 +121,7 @@ var closeEditOrgMenu = function() {
     $('.organization-detail').velocity({
         left: "0"
     }, {
-        easing: "swing",
+        duration: 0
     });
     app.edit_org_menu_open = false;
 }

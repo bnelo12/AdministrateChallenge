@@ -36,10 +36,6 @@
     margin: 22px;
 }
 
-#organization-list {
-    overflow-y: auto;
-    height: 100%;
-}
 
 .organozation-list-item:hover{
     cursor: pointer;
