@@ -132,16 +132,15 @@ var addOrganizationToList = function(orgName, orgEmail) {
     let clone = document.importNode(template.content, true);
     $(clone).find('#organization-name').text(orgName);
     $(clone).find('#organization-email').text(orgEmail);
+    $(clone).find('li').attr('id', "org-" + orgName);
     let orgElem = $('#organization-list').append(clone);
-    //$(orgElem[0]).attr("id", "org-".concat(orgName));
-    orgElem.css("transform", "translate(-100%)");
     $('#org-' + orgName).click(() => {
         openEditOrgMenu(orgName);
     });
-    $(orgElem).velocity({transform: "translate(-100%)"}, {
+    $('#org-' + orgName).velocity({transform: "translate(-100%)"}, {
         duration: 0,
         complete: function() {
-            $(orgElem).velocity({transform: "translate(0px)"}, {easing: "swing"});
+            $('#org-' + orgName).velocity({transform: "translate(0)"}, {easing: "swing"});
         }
     });
 }
