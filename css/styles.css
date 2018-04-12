@@ -7,33 +7,14 @@
     background-color: #FAFAFA;
 }
 
-.add-organization-view {
+.sliding-window {
     position: absolute;
     width: 25vw;
     margin: 0px;
     height: calc(100vh - 100px);
     top: 100px;
-    left: 0;
-    background-color: #FAFAFA;
-}
-
-.add-contact-view {
-    position: absolute;
-    width: 25vw;
-    margin: 0px;
-    height: calc(100vh - 100px);
-    top: 100px;
-    left: 0;
-    background-color: #FAFAFA;
-}
-
-.delete-org-view {
-    position: absolute;
-    width: 25vw;
-    margin: 0px;
-    height: calc(100vh - 100px);
-    top: 100px;
-    left: 0;
+    left: 0px;
+    transform: translateX(-25vw);
     background-color: #FAFAFA;
 }
 
@@ -48,17 +29,6 @@
     background-color: #ebebeb;
     padding: 0;
 }
-
-.organization-detail {
-    position: absolute;
-    width: 25vw;
-    margin: 0px;
-    height: calc(100vh - 100px);
-    top: 100px;
-    left: 0;
-    background-color: #FAFAFA;
-}
-
 
 .add-org-form {
     text-align: center;
@@ -108,4 +78,17 @@
 .edit-contact-button {
     position: relative;
     left: 10px;
+}
+
+.delete-confirmation {
+    text-align: center;
+}
+
+.delete-button:hover {
+    background-color: red;
+    color: white;
+}
+
+.edit-contact-view {
+    text-align: center;
 }

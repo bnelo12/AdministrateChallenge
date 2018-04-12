@@ -24,7 +24,7 @@
             </header>
         </div>
         <!-- Add Organization View -->
-        <div class="add-organization-view  mdl-shadow--4dp">
+        <div class="add-organization-view sliding-window mdl-shadow--4dp">
             <div class="organization-view-header">
                 <h2 class="mdl-card__title-text">Add Organization</h2>
                 <hr/>
@@ -51,8 +51,31 @@
                 <div class="mdl-spinner mdl-js-spinner" id="add-org-spinner"></div>      
             </div>
         </div>
+        <!-- Edit Contact View -->
+        <div class="edit-contact-view sliding-window mdl-shadow--4dp">
+            <div class="organization-view-header">
+                <h2 class="mdl-card__title-text">Edit Contact</h2>
+                <hr/>
+            </div>
+            <div class="edit-contact-form">
+                <form action="#" id="edit-contact-form">
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" name="phone">
+                        <label class="mdl-textfield__label" for="phone">Phone Number...</label>
+                    </div>
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" name="email">
+                        <label class="mdl-textfield__label" for="email">Email...</label>
+                    </div>
+                </form>
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="submit-edit-contact-button">
+                        Submit
+                </button>
+                <div class="mdl-spinner mdl-js-spinner" id="add-contact-spinner"></div>      
+            </div>
+        </div>
         <!-- Add Contact View -->
-        <div class="add-contact-view  mdl-shadow--4dp">
+        <div class="add-contact-view sliding-window mdl-shadow--4dp">
             <div class="organization-view-header">
                 <h2 class="mdl-card__title-text">Add Contact</h2>
                 <hr/>
@@ -80,18 +103,21 @@
             </div>
         </div>
         <!-- Delete Org View -->
-        <div class="delete-org-view  mdl-shadow--4dp">
+        <div class="delete-org-view sliding-window mdl-shadow--4dp">
             <div class="organization-view-header">
                 <h2 class="mdl-card__title-text">Delete Organization</h2>
                 <hr/>
             </div>
-            Are you sure you wish to delete this organization? This will delete all associated contacts.
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="delete-org-button-confirm">
-                Delete
-            </button>    
+            <div class="delete-confirmation">
+                Are you sure you wish to delete this organization? This will also delete all associated contacts.
+                <br/><br/><br/>
+                <button class="mdl-button mdl-js-button mdl-button--raised delete-button" id="delete-org-button-confirm">
+                    Delete
+                </button>  
+            </div>  
         </div>
         <!-- Organization Detail -->
-        <div class="organization-detail  mdl-shadow--4dp">
+        <div class="organization-detail sliding-window mdl-shadow--4dp">
             <button id="edit-org-button" class="mdl-button mdl-js-button mdl-button--icon">
                 <i class="material-icons">more_vert</i>
             </button>
