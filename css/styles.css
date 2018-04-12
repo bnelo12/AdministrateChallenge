@@ -27,8 +27,26 @@
     background-color: #FAFAFA;
 }
 
+.delete-org-view {
+    position: absolute;
+    width: 25vw;
+    margin: 0px;
+    height: calc(100vh - 100px);
+    top: 100px;
+    left: 0;
+    background-color: #FAFAFA;
+}
+
 .contact-list-item {
     height: 110px;
+}
+
+#contact-list {
+    max-height: calc(100vh - 346px);
+    overflow: scroll;
+    margin: 0;
+    background-color: #ebebeb;
+    padding: 0;
 }
 
 .organization-detail {
@@ -81,4 +99,13 @@
 #edit-org-button {
     float: right;
     top: 20px;
+}
+
+.subtitle {
+    color: white;
+}
+
+.edit-contact-button {
+    position: relative;
+    left: 10px;
 }

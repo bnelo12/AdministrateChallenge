@@ -2,6 +2,7 @@ var app = {
     create_org_menu_open: false,
     edit_org_menu_open: false,
     add_contact_menu_open: false,
+    delete_org_menu_open: false,
     active_org: null,
     address_book: {
         organizations: []
@@ -13,14 +14,13 @@ $(document).ready(function() {
     $('#add-org-button').click(function() {if (app.create_org_menu_open) {closeCreateOrgMenu();} else {openCreateOrgMenu();}});
     $('#submit-add-org-button').click(submitCreateOrgMenu);
     $('#submit-add-contact-button').click(submitAddContactMenu);
+    $('#delete-org-button').click(openDeleteOrgMenu);
     $('#add-contact-view').click(openAddContactMenu);
     getOrgsFromDatabase();
     setInterval(updateUI, 200);
 });
 
-// var Menu = (function {
-//     var Menus = ()
-// })
+// TODO: Sepeate different objects
 
 var openCreateOrgMenu = function() {
     closeAllMenus();
@@ -39,8 +39,21 @@ var openCreateOrgMenu = function() {
 }
 
 var openAddContactMenu = function() {
+    if (app.add_contact_menu_open) return;
+    closeAllSubMenus();
     app.add_contact_menu_open = true;
     $('.add-contact-view').velocity({
+        transform: "translate(50vw)"
+    }, {
+        easing: "swing",
+    });
+}
+
+var openDeleteOrgMenu = function() {
+    if (app.delete_org_menu_open) return;
+    closeAllSubMenus();
+    app.delete_org_menu_open = true;
+    $('.delete-org-view').velocity({
         transform: "translate(50vw)"
     }, {
         easing: "swing",
@@ -58,6 +71,7 @@ var openEditOrgMenu = function(orgName) {
     }, {
         easing: "swing",
     });
+    getContactsFromDatabase(orgName);
     app.edit_org_menu_open = true;
 }
 
@@ -89,6 +103,7 @@ var closeAddContactMenu = function() {
 
 var closeEditOrgMenu = function() {
     app.active_org = null;
+    $('#contact-list').html("");
     $('#add-org-button-icon').text('add');
     $('.organization-detail').velocity({
         left: "0"
@@ -98,14 +113,39 @@ var closeEditOrgMenu = function() {
     app.edit_org_menu_open = false;
 }
 
+var closeDeleteOrgMenu = function() {
+    app.delete_org_menu_open = false;
+    $('.delete-org-view').velocity({
+        transform: "translate(0)"
+    }, {
+        duration: 0
+    });
+}
+
 var getOrgsFromDatabase = function() {
     $.ajax( { url: "https://api.mlab.com/api/1/databases/address_book/collections/organization?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj",
-        data: createOrgJSON(),
         type: "GET",
         contentType: "application/json",
         success: function(data, status) {
             app.address_book.organizations = data;
             app.update_ui = true;
+        }
+    });
+}
+
+var getContactsFromDatabase = function(organizationName) {
+    let query = "https://api.mlab.com/api/1/databases/address_book/collections/contacts?";
+    query += "apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj&"
+    query += 'q={"organization":"' + organizationName + '"}';
+    $.ajax( { url: query,
+        type: "GET",
+        contentType: "application/json",
+        success: function(data, status) {
+            app.address_book.contacts = data;
+            $('#contact-list').html("");
+            data.forEach(function(contact) {
+                addContactToList(contact.name, contact.email, contact.phone);
+            });
         }
     });
 }
@@ -125,12 +165,13 @@ var clearAddContactMenu = function() {
 }
 
 var createContactJSON = function() {
-    let orgJSON = $('#add-contact-form input').serializeArray().reduce((obj, field) => {
+    let contactJSON = $('#add-contact-form input').serializeArray().reduce((obj, field) => {
         obj[field.name] = field.value;
         return obj;
     }, {});
-    orgJSON['_id'] = orgJSON.name;
-    return orgJSON
+    contactJSON['_id'] = contactJSON.name;
+    contactJSON['organization'] = app.active_org.name;
+    return contactJSON
 }
 
 var createOrgJSON = function() {
@@ -154,6 +195,7 @@ var submitCreateOrgMenu = function() {
           success: function(data, status) {
             closeCreateOrgMenu();
             addOrganizationToList(orgJSON.name, orgJSON.email);
+            app.address_book.organizations.push(orgJSON);
             $("#submit-add-org-button").show();
             $("#add-org-spinner").removeClass('is-active');
           }
@@ -164,15 +206,15 @@ var submitAddContactMenu = function() {
     $("#submit-add-contact-button").hide();
     $("#add-contact-spinner").addClass('is-active');
     let contactJSON = createContactJSON();
-
     $.ajax( { url: "https://api.mlab.com/api/1/databases/address_book/collections/contacts?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj",
 		  data: JSON.stringify(contactJSON),
 		  type: "POST",
           contentType: "application/json",
           success: function(data, status) {
             closeAddContactMenu();
-            $("#submit-add-org-button").show();
-            $("#add-org-spinner").removeClass('is-active');
+            $("#submit-add-contact-button").show();
+            $("#add-contact-spinner").removeClass('is-active');
+            addContactToList(contactJSON.name, contactJSON.email, contactJSON.phone);
           }
     });
 }
@@ -190,6 +232,12 @@ var closeAllMenus = function() {
     if (app.create_org_menu_open) closeCreateOrgMenu();
     if (app.edit_org_menu_open) closeEditOrgMenu();
     if (app.add_contact_menu_open) closeAddContactMenu();
+    if (app.delete_org_menu_open) closeDeleteOrgMenu();
+}
+
+var closeAllSubMenus = function() {
+    if (app.add_contact_menu_open) closeAddContactMenu();
+    if (app.delete_org_menu_open) closeDeleteOrgMenu();
 }
 
 var getOrgByName = function(orgName) {
@@ -214,4 +262,17 @@ var addOrganizationToList = function(orgName, orgEmail) {
             $('#org-' + orgName).velocity({transform: "translate(0)"}, {easing: "swing"});
         }
     });
+}
+
+var addContactToList = function(name, email, phone) {
+    let template = document.querySelector('#contact-list-item');
+    let clone = document.importNode(template.content, true);
+    $(clone).find('#contact-name').text(name);
+    $(clone).find('#contact-email').text(email);
+    $(clone).find('#contact-phone').text(phone);
+    $(clone).find('li').attr('id', "contact-" + name);
+    let orgElem = $('#contact-list').append(clone);
+    // $("contact-" + name).click(() => {
+    //     openEditOrgMenu(name);
+    // });
 }

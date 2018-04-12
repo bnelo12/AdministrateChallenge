@@ -18,6 +18,8 @@
                     <span class="mdl-layout-title">
                         <image src="img/logo.png" width="80px"/>
                     </span>
+                    <div class="mdl-layout-spacer"></div>
+                    <span class="subtitle">Administrate Address Book<br/>Developed by Ben Elo</span>
                 </div>
             </header>
         </div>
@@ -30,8 +32,9 @@
             <div class="add-org-form">
                 <form action="#" id="add-org-form">
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" name="name">
+                        <input class="mdl-textfield__input" type="text" name="name" required>
                         <label class="mdl-textfield__label" for="name">Name...</label>
+                        <span class="mdl-textfield__error">Organization name is required</span>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
                         <input class="mdl-textfield__input" type="text" name="phone">
@@ -57,8 +60,9 @@
             <div class="add-contact-form">
                 <form action="#" id="add-contact-form">
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" name="name">
+                        <input class="mdl-textfield__input" type="text" name="name" required>
                         <label class="mdl-textfield__label" for="name">Name...</label>
+                        <span class="mdl-textfield__error">Contact name is required</span>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
                         <input class="mdl-textfield__input" type="text" name="phone">
@@ -72,8 +76,19 @@
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="submit-add-contact-button">
                         Submit
                 </button>
-                <div class="mdl-spinner mdl-js-spinner" id="add-org-spinner"></div>      
+                <div class="mdl-spinner mdl-js-spinner" id="add-contact-spinner"></div>      
             </div>
+        </div>
+        <!-- Delete Org View -->
+        <div class="delete-org-view  mdl-shadow--4dp">
+            <div class="organization-view-header">
+                <h2 class="mdl-card__title-text">Delete Organization</h2>
+                <hr/>
+            </div>
+            Are you sure you wish to delete this organization? This will delete all associated contacts.
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="delete-org-button-confirm">
+                Delete
+            </button>    
         </div>
         <!-- Organization Detail -->
         <div class="organization-detail  mdl-shadow--4dp">
@@ -83,12 +98,33 @@
             <ul class="mdl-menu mdl-js-menu" for="edit-org-button">
                 <li class="mdl-menu__item">Edit</li>
                 <li class="mdl-menu__item" id="add-contact-view">Add Contact</li>
-                <li class="mdl-menu__item" style="background-color: red; color: white;">Delete</li>
+                <li class="mdl-menu__item" style="background-color: red; color: white;" id="delete-org-button">Delete</li>
             </ul>
             <div class="organization-view-header">
                 <h2 class="mdl-card__title-text" id="organization-name">Organization</h2>
                 <hr/>
             </div>
+            <template id="contact-list-item">
+                <li class="mdl-list__item mdl-list__item--three-line">
+                    <span class="mdl-list__item-primary-content">
+                        <i class="material-icons mdl-list__item-avatar">person</i>
+                        <span id="contact-name">TEMPLATE</span>
+                        <span class="mdl-list__item-text-body">
+                            <span class="mdl-list__item-sub-title" id="contact-email">
+                                TEMPLATE
+                            </span>
+                            <br/>
+                            <span class="mdl-list__item-sub-title" id="contact-phone">
+                                TEMPLATE
+                            </span>
+                        </span>
+                    </span>
+                    <button class="mdl-button mdl-js-button mdl-button--icon edit-contact-button">
+                        <i class="material-icons">mode_edit</i>
+                    </button>
+                </li>
+                <hr class="organization-list-line-break"/>
+            </template>
             <ul class="mdl-list">
                 <li class="mdl-list__item">
                     <span class="mdl-list__item-primary-content" id="org-detail-phone">
@@ -101,21 +137,12 @@
                     </span>
                 </li>
             </ul>
-            <ul class="demo-list-control mdl-list" id="contact-list">
-                <hr class="organization-list-line-break"/>
-                <li class="mdl-list__item mdl-list__item--two-line contact-list-item">
-                    <span class="mdl-list__item-primary-content">
-                        <span id="contact-name">TEMPLATE</span>
-                        <span class="mdl-list__item-sub-title" id="contact-email">
-                            TEMPLATE
-                        </span>
-                        <span class="mdl-list__item-sub-title" id="contact-email">
-                            TEMPLATE
-                        </span>
-                    </span>
-                </li>
-                <hr class="organization-list-line-break"/>
-            </ul>
+            <div>
+                <ul class="mdl-list" id="contact-list">
+                    <hr class="organization-list-line-break"/>
+                    
+                </ul>
+            </div>
         </div>
         <!-- Organization List View -->
         <div class="organization-view  mdl-shadow--4dp">
@@ -127,7 +154,6 @@
                 <hr/>
             </div>
             <ul class="demo-list-control mdl-list" id="organization-list">
-                <!--div class="mdl-spinner mdl-js-spinner is-active" id="organization-list-spinner"></div-->
                 <template id="organization-list-item">
                     <li class="mdl-list__item mdl-list__item--two-line organozation-list-item">
                         <span class="mdl-list__item-primary-content">
