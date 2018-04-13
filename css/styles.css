@@ -43,12 +43,12 @@
 }
 
 
-.organozation-list-item:hover{
+.organization-list-li:hover{
     cursor: pointer;
     background-color: rgb(83,109,254);
 }
 
-.organozation-list-item:hover *{
+.organization-list-li:hover *{
     color: white !important;
 }
 
@@ -91,4 +91,9 @@
 
 .edit-contact-view {
     text-align: center;
+}
+
+.close-sub-menu-button {
+    float: right;
+    top: 20px;
 }

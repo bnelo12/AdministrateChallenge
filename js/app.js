@@ -19,11 +19,13 @@ $(document).ready(function() {
     $('#submit-add-contact-button').click(submitAddContactMenu);
     $('#delete-org-button').click(openDeleteOrgMenu);
     $('#add-contact-view').click(openAddContactMenu);
+    $('#delete-org-button-confirm').click(deleteOrgFromDatabase);
+    $('.close-sub-menu-button').each(function(i, e) {
+        $(e).click(closeAllSubMenus);
+    });
     getOrgsFromDatabase();
     setInterval(updateUI, 200);
 });
-
-// TODO: Sepeate different objects
 
 var openCreateOrgMenu = function() {
     closeAllMenus();
@@ -68,9 +70,14 @@ var openEditContactMenu = function(name) {
     app.active_contact = getContactByName(name);
     app.edit_contact_menu_open = true;
     let phone = app.active_contact.phone;
-    if (phone != "") {
-        $("#edit-contact-form input")[0].value = app.active_contact.phone;
+    let email = app.active_contact.email;
+    if (phone) {
+        $("#edit-contact-form input")[0].value = phone;
         $("#edit-contact-form label")[0].innerText = "";
+    }
+    if (email) {
+        $("#edit-contact-form input")[1].value = email;
+        $("#edit-contact-form label")[1].innerText = "";
     }
     $('.edit-contact-view').velocity({
         transform: "translate(50vw)"
@@ -98,7 +105,7 @@ var closeCreateOrgMenu = function() {
     $('#add-org-button-icon').text('add');
     clearCreateOrgMenu();
     $('.add-organization-view').velocity({
-        transform: "translate(-25%)"
+        transform: "translate(-25vw)"
     }, {
         duration: 0
     });
@@ -114,7 +121,7 @@ var closeAddContactMenu = function() {
     app.add_contact_menu_open = false;
     clearAddContactMenu();
     $('.add-contact-view').velocity({
-        transform: "translate(0)"
+        transform: "translate(-25vw)"
     }, {
         duration: 0
     });
@@ -135,7 +142,7 @@ var closeEditOrgMenu = function() {
 var closeDeleteOrgMenu = function() {
     app.delete_org_menu_open = false;
     $('.delete-org-view').velocity({
-        transform: "translate(0)"
+        transform: "translate(-25vw)"
     }, {
         duration: 0
     });
@@ -145,7 +152,7 @@ var closeEditContactMenu = function() {
     app.edit_contact_menu_open = false;
     clearEditContactMenu();
     $('.edit-contact-view').velocity({
-        transform: "translate(0)"
+        transform: "translate(-25vw)"
     }, {
         duration: 0
     });
@@ -159,6 +166,32 @@ var getOrgsFromDatabase = function() {
             app.address_book.organizations = data;
             app.update_ui = true;
         }
+    });
+}
+
+var deleteOrgFromDatabase = function() {
+    let org = app.active_org.name;
+    let query = "https://api.mlab.com/api/1/databases/address_book/collections/organization?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj";
+    query += '&q={"name":"' + org + '"}'
+    $.ajax( { 
+        url: query,
+        data: "[]",
+        type: "PUT",
+        contentType: "application/json",
+        success: function(data, status) {
+            let name = app.active_org.name;
+            let id = ("org-" + name).replace(/\s+/g, '-');
+            $('#' + id).remove();
+            closeAllMenus();
+        }
+    });
+    let query2 = "https://api.mlab.com/api/1/databases/address_book/collections/contacts?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj";
+    query2 += '&q={"organization":"' + org + '"}'
+    $.ajax( { 
+        url: query2,
+        data: "[]",
+        type: "PUT",
+        contentType: "application/json",
     });
 }
 
@@ -194,6 +227,8 @@ var clearAddContactMenu = function() {
 }
 
 var clearEditContactMenu = function() {
+    $("#edit-contact-form label")[0].innerText = "Phone...";
+    $("#edit-contact-form label")[1].innerText = "Email...";
     $("#edit-contact-form")[0].reset();
     $("#edit-contact-form .mdl-textfield")[0].MaterialTextfield.change()
     $("#edit-contact-form .mdl-textfield")[1].MaterialTextfield.change()
@@ -219,10 +254,13 @@ var createOrgJSON = function() {
 }
 
 var submitCreateOrgMenu = function() {
+    if (getOrgByName($('#add-org-form input')[0].value)) {
+        $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Organization name must be unique!"});
+        return;
+    }
     $("#submit-add-org-button").hide();
     $("#add-org-spinner").addClass('is-active');
     let orgJSON = createOrgJSON();
-
     $.ajax( { url: "https://api.mlab.com/api/1/databases/address_book/collections/organization?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj",
 		  data: JSON.stringify(orgJSON),
 		  type: "POST",
@@ -249,6 +287,7 @@ var submitAddContactMenu = function() {
             closeAddContactMenu();
             $("#submit-add-contact-button").show();
             $("#add-contact-spinner").removeClass('is-active');
+            app.address_book.contacts.push(contactJSON);
             addContactToList(contactJSON.name, contactJSON.email, contactJSON.phone);
           }
     });
@@ -294,15 +333,16 @@ var addOrganizationToList = function(orgName, orgEmail) {
     let clone = document.importNode(template.content, true);
     $(clone).find('#organization-name').text(orgName);
     $(clone).find('#organization-email').text(orgEmail);
-    $(clone).find('li').attr('id', "org-" + orgName);
+    let id = ("org-" + orgName).replace(/\s+/g, '-');
+    $(clone).find('.organization-list-item').attr('id', id);
     let orgElem = $('#organization-list').append(clone);
-    $('#org-' + orgName).click(() => {
+    $('#' + id).click(() => {
         openEditOrgMenu(orgName);
     });
-    $('#org-' + orgName).velocity({transform: "translate(-100%)"}, {
+    $('#' + id).velocity({transform: "translate(-100%)"}, {
         duration: 0,
         complete: function() {
-            $('#org-' + orgName).velocity({transform: "translate(0)"}, {easing: "swing"});
+            $('#' + id).velocity({transform: "translate(0)"}, {easing: "swing"});
         }
     });
 }
@@ -313,7 +353,7 @@ var addContactToList = function(name, email, phone) {
     $(clone).find('#contact-name').text(name);
     $(clone).find('#contact-email').text(email);
     $(clone).find('#contact-phone').text(phone);
-    let id = ("contact-" + name).replace(/\s/g, '');
+    let id = ("contact-" + name).replace(/\s+/g, '-');
     $(clone).find('button').attr('id', id);
     let orgElem = $('#contact-list').append(clone);
     $("#" + id).click(() => {

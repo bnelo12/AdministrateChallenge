@@ -24,6 +24,10 @@
             </header>
         </div>
         <!-- Add Organization View -->
+        <div id="org-error-toast" class="mdl-js-snackbar mdl-snackbar">
+            <div class="mdl-snackbar__text"></div>
+            <button class="mdl-snackbar__action" type="button"></button>
+        </div>
         <div class="add-organization-view sliding-window mdl-shadow--4dp">
             <div class="organization-view-header">
                 <h2 class="mdl-card__title-text">Add Organization</h2>
@@ -53,6 +57,9 @@
         </div>
         <!-- Edit Contact View -->
         <div class="edit-contact-view sliding-window mdl-shadow--4dp">
+            <button class="mdl-button mdl-js-button mdl-button--icon close-sub-menu-button">
+                <i class="material-icons">close</i>
+            </button>
             <div class="organization-view-header">
                 <h2 class="mdl-card__title-text">Edit Contact</h2>
                 <hr/>
@@ -71,11 +78,18 @@
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="submit-edit-contact-button">
                         Submit
                 </button>
+                <br/><br/><br/><br/>
+                <button class="mdl-button mdl-js-button mdl-button--raised delete-button" id="delete-contact-button">
+                        DELETE
+                </button>
                 <div class="mdl-spinner mdl-js-spinner" id="add-contact-spinner"></div>      
             </div>
         </div>
         <!-- Add Contact View -->
         <div class="add-contact-view sliding-window mdl-shadow--4dp">
+            <button class="mdl-button mdl-js-button mdl-button--icon close-sub-menu-button">
+                <i class="material-icons">close</i>
+            </button>
             <div class="organization-view-header">
                 <h2 class="mdl-card__title-text">Add Contact</h2>
                 <hr/>
@@ -104,6 +118,9 @@
         </div>
         <!-- Delete Org View -->
         <div class="delete-org-view sliding-window mdl-shadow--4dp">
+            <button class="mdl-button mdl-js-button mdl-button--icon close-sub-menu-button">
+                <i class="material-icons">close</i>
+            </button>
             <div class="organization-view-header">
                 <h2 class="mdl-card__title-text">Delete Organization</h2>
                 <hr/>
@@ -181,17 +198,19 @@
             </div>
             <ul class="demo-list-control mdl-list" id="organization-list">
                 <template id="organization-list-item">
-                    <li class="mdl-list__item mdl-list__item--two-line organozation-list-item">
-                        <span class="mdl-list__item-primary-content">
-                            <i class="material-icons mdl-list__item-icon" style="font-size: 30px">folder_shared</i>
-                            <span id="organization-name">Appointed</span>
-                            <span class="mdl-list__item-sub-title" id="organization-email">appointed@gmail.com</span>
-                        </span>
-                        <span class="mdl-list__item-secondary-action">
-                            <i class="material-icons mdl-list__item-icon" style="font-size: 30px">chevron_right</i>
-                        </span>
-                    </li>
-                    <hr class="organization-list-line-break"/>
+                    <div class="organization-list-item">
+                        <li class="mdl-list__item mdl-list__item--two-line organization-list-li">
+                            <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon" style="font-size: 30px">folder_shared</i>
+                                <span id="organization-name">Appointed</span>
+                                <span class="mdl-list__item-sub-title" id="organization-email">appointed@gmail.com</span>
+                            </span>
+                            <span class="mdl-list__item-secondary-action">
+                                <i class="material-icons mdl-list__item-icon" style="font-size: 30px">chevron_right</i>
+                            </span>
+                        </li>
+                        <hr class="organization-list-line-break"/>
+                    </div>
                 </template>
             </ul>
         </div>
