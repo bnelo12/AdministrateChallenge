@@ -23,6 +23,9 @@
                 </div>
             </header>
         </div>
+        <a href="https://github.com/bnelo12/AdministrateChallenge" id="github-link">
+            <img src="img/GitHub-Mark-32px.png"/>
+        </a>
         <!-- Add Organization View -->
         <div id="org-error-toast" class="mdl-js-snackbar mdl-snackbar">
             <div class="mdl-snackbar__text"></div>
@@ -78,9 +81,9 @@
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="submit-edit-contact-button">
                         Submit
                 </button>
-                <br/><br/><br/><br/>
-                <button class="mdl-button mdl-js-button mdl-button--raised delete-button" id="delete-contact-button">
-                        DELETE
+                <br/><br/><br/>
+                <button class="mdl-button mdl-js-button mdl-button--icon delete-button" id="delete-contact-button">
+                    <i class="material-icons">delete</i>
                 </button>
                 <div class="mdl-spinner mdl-js-spinner" id="add-contact-spinner"></div>      
             </div>
@@ -148,25 +151,27 @@
                 <hr/>
             </div>
             <template id="contact-list-item">
-                <li class="mdl-list__item mdl-list__item--three-line">
-                    <span class="mdl-list__item-primary-content">
-                        <i class="material-icons mdl-list__item-avatar">person</i>
-                        <span id="contact-name">TEMPLATE</span>
-                        <span class="mdl-list__item-text-body">
-                            <span class="mdl-list__item-sub-title" id="contact-email">
-                                TEMPLATE
-                            </span>
-                            <br/>
-                            <span class="mdl-list__item-sub-title" id="contact-phone">
-                                TEMPLATE
+                <div class="deletable">
+                    <li class="mdl-list__item mdl-list__item--three-line">
+                        <span class="mdl-list__item-primary-content">
+                            <i class="material-icons mdl-list__item-avatar">person</i>
+                            <span id="contact-name">TEMPLATE</span>
+                            <span class="mdl-list__item-text-body">
+                                <span class="mdl-list__item-sub-title" id="contact-email">
+                                    TEMPLATE
+                                </span>
+                                <br/>
+                                <span class="mdl-list__item-sub-title" id="contact-phone">
+                                    TEMPLATE
+                                </span>
                             </span>
                         </span>
-                    </span>
-                    <button class="mdl-button mdl-js-button mdl-button--icon edit-contact-button">
-                        <i class="material-icons">mode_edit</i>
-                    </button>
-                </li>
-                <hr class="organization-list-line-break"/>
+                        <button class="mdl-button mdl-js-button mdl-button--icon edit-contact-button">
+                            <i class="material-icons">mode_edit</i>
+                        </button>
+                    </li>
+                    <hr class="organization-list-line-break"/>
+                </div>
             </template>
             <ul class="mdl-list">
                 <li class="mdl-list__item">

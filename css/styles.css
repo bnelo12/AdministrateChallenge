@@ -71,6 +71,16 @@
     top: 20px;
 }
 
+#github-link {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+
+#delete-contact-button {
+    left: 15px;
+}
+
 .subtitle {
     color: white;
 }

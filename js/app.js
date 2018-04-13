@@ -20,6 +20,7 @@ $(document).ready(function() {
     $('#delete-org-button').click(openDeleteOrgMenu);
     $('#add-contact-view').click(openAddContactMenu);
     $('#delete-org-button-confirm').click(deleteOrgFromDatabase);
+    $('#delete-contact-button').click(deleteContactFromDatabase);
     $('.close-sub-menu-button').each(function(i, e) {
         $(e).click(closeAllSubMenus);
     });
@@ -169,6 +170,23 @@ var getOrgsFromDatabase = function() {
     });
 }
 
+var deleteContactFromDatabase = function() {
+    let contact = app.active_contact.name;
+    let query = "https://api.mlab.com/api/1/databases/address_book/collections/contacts?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj";
+    query += '&q={"name":"' + contact + '"}';
+    $.ajax( { 
+        url: query,
+        data: "[]",
+        type: "PUT",
+        contentType: "application/json",
+        success: function(data, status) {
+            let id = ("contact-" + contact).replace(/\s+/g, '-');
+            $('#' + id).parents('.deletable').remove();
+            closeAllSubMenus();
+        }
+    });
+}
+
 var deleteOrgFromDatabase = function() {
     let org = app.active_org.name;
     let query = "https://api.mlab.com/api/1/databases/address_book/collections/organization?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj";
@@ -179,8 +197,7 @@ var deleteOrgFromDatabase = function() {
         type: "PUT",
         contentType: "application/json",
         success: function(data, status) {
-            let name = app.active_org.name;
-            let id = ("org-" + name).replace(/\s+/g, '-');
+            let id = ("org-" + org).replace(/\s+/g, '-');
             $('#' + id).remove();
             closeAllMenus();
         }
