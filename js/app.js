@@ -21,6 +21,7 @@ $(document).ready(function() {
     $('#add-contact-view').click(openAddContactMenu);
     $('#delete-org-button-confirm').click(deleteOrgFromDatabase);
     $('#delete-contact-button').click(deleteContactFromDatabase);
+    $('#submit-edit-contact-button').click(submitEditContactMenu);
     $('.close-sub-menu-button').each(function(i, e) {
         $(e).click(closeAllSubMenus);
     });
@@ -183,6 +184,7 @@ var deleteContactFromDatabase = function() {
             let id = ("contact-" + contact).replace(/\s+/g, '-');
             $('#' + id).parents('.deletable').remove();
             closeAllSubMenus();
+            $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Delete Successful"});
         }
     });
 }
@@ -200,6 +202,7 @@ var deleteOrgFromDatabase = function() {
             let id = ("org-" + org).replace(/\s+/g, '-');
             $('#' + id).remove();
             closeAllMenus();
+            $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Delete Successful"});
         }
     });
     let query2 = "https://api.mlab.com/api/1/databases/address_book/collections/contacts?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj";
@@ -275,6 +278,10 @@ var submitCreateOrgMenu = function() {
         $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Organization name must be unique!"});
         return;
     }
+    if ($('#add-org-form input')[0].value == "") {
+        $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Organization name is required!"});
+        return;
+    }
     $("#submit-add-org-button").hide();
     $("#add-org-spinner").addClass('is-active');
     let orgJSON = createOrgJSON();
@@ -288,6 +295,7 @@ var submitCreateOrgMenu = function() {
             app.address_book.organizations.push(orgJSON);
             $("#submit-add-org-button").show();
             $("#add-org-spinner").removeClass('is-active');
+            $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Organization added successfully!"});
           }
     });
 }
@@ -306,6 +314,36 @@ var submitAddContactMenu = function() {
             $("#add-contact-spinner").removeClass('is-active');
             app.address_book.contacts.push(contactJSON);
             addContactToList(contactJSON.name, contactJSON.email, contactJSON.phone);
+            $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Contact added successfully!"});
+          }
+    });
+}
+
+var submitEditContactMenu = function() {
+    $("#submit-edit-contact-button").hide();
+    $("#edit-contact-spinner").addClass('is-active');
+    let newEmail = $("#edit-contact-form input")[1].value;
+    let newPhone = $("#edit-contact-form input")[0].value;
+    let contactJSON = {
+        "phone": newPhone,
+        "email": newEmail,
+        "organization": app.active_org.name,
+        "name": app.active_contact.name
+    }
+    $.ajax( { url: "https://api.mlab.com/api/1/databases/address_book/collections/contacts/" + app.active_contact.name + "?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj",
+		  data: JSON.stringify(contactJSON),
+		  type: "PUT",
+          contentType: "application/json",
+          success: function(data, status) {
+            $("#edit-contact-spinner").removeClass('is-active');
+            $("#submit-edit-contact-button").show();
+            let id = ("contact-" + app.active_contact.name).replace(/\s+/g, '-');
+            $('#' + id).prev().find('#contact-email').text(newEmail);
+            $('#' + id).prev().find('#contact-phone').text(newPhone);
+            app.active_contact.email = newEmail;
+            app.active_contact.phone = newPhone;
+            closeEditContactMenu();
+            $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Contact edited successfully!"});
           }
     });
 }
