@@ -48,8 +48,9 @@
                         <label class="mdl-textfield__label" for="phone">Phone Number...</label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" name="email">
+                        <input class="mdl-textfield__input" type="text" name="email" pattern="([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3})$">
                         <label class="mdl-textfield__label" for="email">Email...</label>
+                        <span class="mdl-textfield__error">Invalid Email</span>
                     </div>
                 </form>
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="submit-add-org-button">
@@ -58,6 +59,34 @@
                 <div class="mdl-spinner mdl-js-spinner" id="add-org-spinner"></div>      
             </div>
         </div>
+        <!-- Edit Org Details View -->
+        <div class="edit-org-details-view sliding-window mdl-shadow--4dp">
+                <button class="mdl-button mdl-js-button mdl-button--icon close-sub-menu-button">
+                    <i class="material-icons">close</i>
+                </button>
+                <div class="organization-view-header">
+                    <h2 class="mdl-card__title-text">Edit Organization</h2>
+                    <hr/>
+                </div>
+                <div class="edit-org-details-form">
+                    <form action="#" id="edit-org-details-form">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" name="phone">
+                            <label class="mdl-textfield__label" for="phone">Phone Number...</label>
+                        </div>
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" name="email" pattern="([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3})$">
+                            <label class="mdl-textfield__label" for="email">Email...</label>
+                            <span class="mdl-textfield__error">Invalid Email</span>
+                        </div>
+                    </form>
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="submit-edit-org-details-button">
+                            Submit
+                    </button>
+                    <br/>
+                    <div class="mdl-spinner mdl-js-spinner" id="edit-org-details-spinner"></div>
+                </div>
+            </div>
         <!-- Edit Contact View -->
         <div class="edit-contact-view sliding-window mdl-shadow--4dp">
             <button class="mdl-button mdl-js-button mdl-button--icon close-sub-menu-button">
@@ -74,7 +103,7 @@
                         <label class="mdl-textfield__label" for="phone">Phone Number...</label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" name="email">
+                        <input class="mdl-textfield__input" type="text" name="email" pattern="([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3})$">
                         <label class="mdl-textfield__label" for="email">Email...</label>
                     </div>
                 </form>
@@ -110,8 +139,9 @@
                         <label class="mdl-textfield__label" for="phone">Phone Number...</label>
                     </div>
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" name="email">
+                        <input class="mdl-textfield__input" type="text" name="email" pattern="([a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3})$">
                         <label class="mdl-textfield__label" for="email">Email...</label>
+                        <span class="mdl-textfield__error">Invalid Email</span>
                     </div>
                 </form>
                 <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" id="submit-add-contact-button">
@@ -143,7 +173,7 @@
                 <i class="material-icons">more_vert</i>
             </button>
             <ul class="mdl-menu mdl-js-menu" for="edit-org-button">
-                <li class="mdl-menu__item">Edit</li>
+                <li class="mdl-menu__item" id ="edit-org-details-button">Edit</li>
                 <li class="mdl-menu__item" id="add-contact-view">Add Contact</li>
                 <li class="mdl-menu__item" style="background-color: red; color: white;" id="delete-org-button">Delete</li>
             </ul>
@@ -202,14 +232,14 @@
                 </button>
                 <hr/>
             </div>
-            <ul class="demo-list-control mdl-list" id="organization-list">
+            <ul class="mdl-list" id="organization-list">
                 <template id="organization-list-item">
                     <div class="organization-list-item">
                         <li class="mdl-list__item mdl-list__item--two-line organization-list-li">
                             <span class="mdl-list__item-primary-content">
                                 <i class="material-icons mdl-list__item-icon" style="font-size: 30px">folder_shared</i>
-                                <span id="organization-name">Appointed</span>
-                                <span class="mdl-list__item-sub-title" id="organization-email">appointed@gmail.com</span>
+                                <span id="organization-name">TEMPLATE</span>
+                                <span class="mdl-list__item-sub-title" id="organization-email">TEMPLATE</span>
                             </span>
                             <span class="mdl-list__item-secondary-action">
                                 <i class="material-icons mdl-list__item-icon" style="font-size: 30px">chevron_right</i>

@@ -18,6 +18,10 @@
     background-color: #FAFAFA;
 }
 
+.edit-org-details-view{
+    text-align: center;
+}
+
 .contact-list-item {
     height: 110px;
 }
@@ -27,6 +31,13 @@
     overflow: scroll;
     margin: 0;
     background-color: #ebebeb;
+    padding: 0;
+}
+
+#organization-list {
+    max-height: calc(100vh - 200px);
+    overflow: scroll;
+    margin: 0;
     padding: 0;
 }
 

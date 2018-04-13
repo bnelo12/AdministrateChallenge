@@ -3,6 +3,7 @@ var app = {
     edit_org_menu_open: false,
     add_contact_menu_open: false,
     edit_contact_menu_open: false,
+    edit_org_details_open: false,
     delete_org_menu_open: false,
     active_org: null,
     active_contact: null,
@@ -22,6 +23,8 @@ $(document).ready(function() {
     $('#delete-org-button-confirm').click(deleteOrgFromDatabase);
     $('#delete-contact-button').click(deleteContactFromDatabase);
     $('#submit-edit-contact-button').click(submitEditContactMenu);
+    $('#edit-org-details-button').click(openEditOrgDetailsMenu);
+    $('#submit-edit-org-details-button').click(submitEditOrgDetails);
     $('.close-sub-menu-button').each(function(i, e) {
         $(e).click(closeAllSubMenus);
     });
@@ -82,6 +85,26 @@ var openEditContactMenu = function(name) {
         $("#edit-contact-form label")[1].innerText = "";
     }
     $('.edit-contact-view').velocity({
+        transform: "translate(50vw)"
+    }, {
+        easing: "swing",
+    });
+}
+
+var openEditOrgDetailsMenu = function(name) {
+    closeAllSubMenus();
+    app.edit_org_details_open = true;
+    let phone = app.active_org.phone;
+    let email = app.active_org.email;
+    if (phone) {
+        $("#edit-org-details-form input")[0].value = phone;
+        $("#edit-org-details-form label")[0].innerText = "";
+    }
+    if (email) {
+        $("#edit-org-details-form input")[1].value = email;
+        $("#edit-org-details-form label")[1].innerText = "";
+    }
+    $('.edit-org-details-view').velocity({
         transform: "translate(50vw)"
     }, {
         easing: "swing",
@@ -160,6 +183,16 @@ var closeEditContactMenu = function() {
     });
 }
 
+var closeEditOrgDetailsMenu = function() {
+    app.edit_org_details_open = false;
+    clearEditContactMenu();
+    $('.edit-org-details-view').velocity({
+        transform: "translate(-25vw)"
+    }, {
+        duration: 0
+    });
+}
+
 var getOrgsFromDatabase = function() {
     $.ajax( { url: "https://api.mlab.com/api/1/databases/address_book/collections/organization?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj",
         type: "GET",
@@ -182,6 +215,7 @@ var deleteContactFromDatabase = function() {
         contentType: "application/json",
         success: function(data, status) {
             let id = ("contact-" + contact).replace(/\s+/g, '-');
+            deleteContactByNameLocally();
             $('#' + id).parents('.deletable').remove();
             closeAllSubMenus();
             $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Delete Successful"});
@@ -201,6 +235,7 @@ var deleteOrgFromDatabase = function() {
         success: function(data, status) {
             let id = ("org-" + org).replace(/\s+/g, '-');
             $('#' + id).remove();
+            deleteOrgByNameLocally(org);
             closeAllMenus();
             $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Delete Successful"});
         }
@@ -301,6 +336,14 @@ var submitCreateOrgMenu = function() {
 }
 
 var submitAddContactMenu = function() {
+    if (getContactByName($('#add-contact-form input')[0].value)) {
+        $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Contact name must be unique!"});
+        return;
+    }
+    if ($('#add-contact-form input')[0].value == "") {
+        $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Contact name is required!"});
+        return;
+    }
     $("#submit-add-contact-button").hide();
     $("#add-contact-spinner").addClass('is-active');
     let contactJSON = createContactJSON();
@@ -348,6 +391,34 @@ var submitEditContactMenu = function() {
     });
 }
 
+var submitEditOrgDetails = function() {
+    $("#submit-edit-org-details-button").hide();
+    $("#edit-org-details-spinner").addClass('is-active');
+    let newEmail = $("#edit-org-details-form input")[1].value;
+    let newPhone = $("#edit-org-details-form input")[0].value;
+    let contactJSON = {
+        "phone": newPhone,
+        "email": newEmail,
+        "name": app.active_org.name,
+    }
+    $.ajax( { url: "https://api.mlab.com/api/1/databases/address_book/collections/organization/" + app.active_org.name + "?apiKey=gnDOBHPppSOdnVmBok9SOEfBtCTEmLyj",
+		  data: JSON.stringify(contactJSON),
+		  type: "PUT",
+          contentType: "application/json",
+          success: function(data, status) {
+            $("#edit-org-details-spinner").removeClass('is-active');
+            $("#submit-edit-org-details-button").show();
+            let id = ("org-" + app.active_org.name).replace(/\s+/g, '-');
+            $('#org-detail-email').text('Email: ' + newEmail);
+            $('#org-detail-phone').text('Phone: ' + newPhone);
+            app.active_org.email = newEmail;
+            app.active_org.phone = newPhone;
+            closeEditOrgDetailsMenu();
+            $('#org-error-toast')[0].MaterialSnackbar.showSnackbar({message: "Organization edited successfully!"});
+          }
+    });
+}
+
 var updateUI = function() {
     if (app.update_ui) {
         app.update_ui = false;
@@ -363,18 +434,30 @@ var closeAllMenus = function() {
     if (app.add_contact_menu_open) closeAddContactMenu();
     if (app.delete_org_menu_open) closeDeleteOrgMenu();
     if (app.edit_contact_menu_open) closeEditContactMenu();
+    if (app.edit_org_details_open) closeEditOrgDetailsMenu();
 }
 
 var closeAllSubMenus = function() {
     if (app.add_contact_menu_open) closeAddContactMenu();
     if (app.delete_org_menu_open) closeDeleteOrgMenu();
     if (app.edit_contact_menu_open) closeEditContactMenu();
+    if (app.edit_org_details_open) closeEditOrgDetailsMenu();
 }
 
 var getOrgByName = function(orgName) {
     return app.address_book.organizations.find(function(e) {
         return e.name == orgName;
     });
+}
+
+var deleteOrgByNameLocally = function(orgName) {
+    let idx = app.address_book.organizations.indexOf(app.active_org);
+    app.address_book.organizations.splice(idx, 1);
+}
+
+var deleteContactByNameLocally = function(orgName) {
+    let idx = app.address_book.contacts.indexOf(app.active_contact);
+    app.address_book.contacts.splice(idx, 1);
 }
 
 var getContactByName = function(name) {
